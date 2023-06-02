@@ -98,3 +98,16 @@ h6 {
   line-height: 1;
 }
 
+::-webkit-scrollbar {
+  width: 3px; 
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #999; 
+  border-radius: 4px; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+

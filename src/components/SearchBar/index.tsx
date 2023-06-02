@@ -1,31 +1,132 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import styled from 'styled-components'
 
-const SearchBar: FC = () =>{
+import { 
+  SearchResultCard,
+  SearchTitleDivider 
+} from '..'
 
-  return(
-    <>
-      <SearchBarContainer>
-        <SearchIcon src='./icons/search.png' alt ='search icon' /> 
-        <TextField placeholder='Search' />
-      </SearchBarContainer>
-    </>
+const SearchBar: FC = () =>{
+  const [ query, setQuery ] = useState('')
+  const [ focus, setFocus ] = useState(true)
+
+  const clearField = () =>{
+    setQuery('')
+  }
+
+  const searchResults = ['asd']
+  return (
+    <SearchBarContainer>
+      <SearchTextFieldContainer
+        focus = {focus || query.length > 0}
+        showResults = {searchResults.length > 0}
+      >
+        <Icon src='./icons/search.png' alt ='search icon' /> 
+        <TextField 
+          placeholder='Search'
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onFocus={() => setFocus(true)}
+          onBlur={() => setFocus(false)}
+        />
+        <CloseIconContainer>
+          { query.length > 0 &&  
+            <CloseIcon 
+              src='./icons/close.png' 
+              alt ='search icon' 
+              onClick={clearField}
+            /> 
+          }
+        </CloseIconContainer>
+      </SearchTextFieldContainer>
+
+      {searchResults.length > 0 &&    
+        <ResultDisplay>
+          <Divider />
+          <ScrollContainer>
+            <SearchTitleDivider title='events' />
+            <SearchResultCard title='cocierto' subtitle='alejandro sanz' image='https://maps.gametime.co/v2/pnc_park/baseball/baseball-8.png' />
+            <SearchResultCard title='cocierto' subtitle='alejandro sanz' image='https://maps.gametime.co/v2/pnc_park/baseball/baseball-8.png' />
+            <SearchResultCard title='cocierto' subtitle='alejandro sanz' image='https://maps.gametime.co/v2/pnc_park/baseball/baseball-8.png' />
+            <SearchTitleDivider title='events' />
+            <SearchResultCard title='cocierto' subtitle='alejandro sanz' image='https://maps.gametime.co/v2/pnc_park/baseball/baseball-8.png' />
+            <SearchResultCard title='cocierto' subtitle='alejandro sanz' image='https://maps.gametime.co/v2/pnc_park/baseball/baseball-8.png' />
+            <SearchResultCard title='cocierto' subtitle='alejandro sanz' image='https://maps.gametime.co/v2/pnc_park/baseball/baseball-8.png' />
+            <SearchTitleDivider title='events' />
+            <SearchResultCard title='cocierto' subtitle='alejandro sanz' image='https://maps.gametime.co/v2/pnc_park/baseball/baseball-8.png' />
+            <SearchResultCard title='cocierto' subtitle='alejandro sanz' image='https://maps.gametime.co/v2/pnc_park/baseball/baseball-8.png' />
+            <SearchResultCard title='cocierto' subtitle='alejandro sanz' image='https://maps.gametime.co/v2/pnc_park/baseball/baseball-8.png' />
+          </ScrollContainer>
+        </ResultDisplay>
+      }
+    </SearchBarContainer>
   )
 }
 
 const SearchBarContainer = styled.div`
-  width: 100%;
-  height: 40px;
-  border: 1.5px solid #808080;
-  border-radius: 50px;
-  display: flex;
-  align-items: center;
-  padding: 0 2% 0 1%;
+  width: 750px;
+  position: relative;
+
+  @media (width < 768px) {
+    width: 90%;
+  }
+
 `
 
-const SearchIcon = styled.img`
-  width: 17px;
-  height: 17px;
+interface TSearchTextFieldContainer {
+  focus: boolean
+  showResults: boolean
+}
+
+const SearchTextFieldContainer = styled.div<TSearchTextFieldContainer>`
+  width: 100%;
+  height: 40px;
+  border: 1.5px solid ${props => props.focus ? 'black' : '#808080'};
+  ${ props => props.showResults 
+    ? 
+      'border-radius: 20px 20px 0px 0px; border-bottom: 0px;'
+    : 
+      'border-radius: 40px;' 
+  }
+  display: flex;
+  align-items: center;
+  padding: 0 15px 0 15px;
+
+  @media (width < 1024px) {
+    height: 50px;
+  }
+
+`
+const Icon = styled.img`
+  width: 15px;
+  height: 15px;
+
+  @media (width < 1024px) {
+    width: 20px;
+    height: 20px;
+  }
+`
+const CloseIconContainer = styled.div`
+  width: 15px;
+  height: 15px;
+
+  @media (width < 1024px) {
+    width: 20px;
+    height: 20px;
+  }
+`
+const CloseIcon = styled.img`
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  &: hover{
+    opacity: 0.5;
+  }
+
+  @media (width < 1024px) {
+    width: 20px;
+    height: 20px;
+  }
 `
 const TextField = styled.input`
   width: 100%;
@@ -35,7 +136,32 @@ const TextField = styled.input`
   font-size: 18px;
   font-family: arial;
   font-weight: 500;
-  padding: 0 1%;
+  padding: 0 2%;
+
+  @media (width < 1024px) {
+    font-size: 20px;
+  }
+
+`
+const ResultDisplay = styled.div`
+  width: 100%;
+  border: 1.5px solid black;
+  border-top: 0px;
+  border-radius: 0px 0px 20px 20px;
+  padding-bottom: 15px;
+  position: absolute;
+`
+const Divider = styled.div`
+  width: 95%; 
+  margin: 0 auto;
+  border-bottom: 0.1px solid #808080;
+`
+const ScrollContainer = styled.div`
+  width: 100%;
+  min-height: 100px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 10px;
 `
 
 export default SearchBar
