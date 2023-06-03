@@ -1,25 +1,64 @@
-import { FC, useState } from 'react'
+import { FC, useState, useEffect } from 'react'
 import styled from 'styled-components'
 
+import { useDebounce } from '../../hooks'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { selectAppReducer } from '../../store/store'
+import { getQuery, setGetQueryStatusStatusIdle } from '../../store/search/thunks'
+import { setClear } from '../../store/search/slicer'
 import { 
   SearchResultCard,
-  SearchTitleDivider 
+  SearchTitleDivider,
+  NoResultCard
 } from '..'
 
 const SearchBar: FC = () =>{
+  const appDispatch = useAppDispatch()
+  const appSelector = useAppSelector(selectAppReducer)
   const [ query, setQuery ] = useState('')
   const [ focus, setFocus ] = useState(true)
-
+  const [ isQueryResult, setIsQueryResult ] = useState(false) 
+  const debounce = useDebounce(query, 500)
   const clearField = () =>{
     setQuery('')
+    appDispatch(setClear())
+    appDispatch(setGetQueryStatusStatusIdle())
   }
 
-  const searchResults = ['asd']
+  useEffect(() => {
+    if (debounce.length > 0) {
+      appDispatch(getQuery(query))
+    }
+  }, [debounce])
+
+  useEffect(()=>{
+    if (query.length === 0) {
+      appDispatch(setClear())
+      appDispatch(setGetQueryStatusStatusIdle())
+    }
+  },[query])
+
+  useEffect(()=>{
+    if (
+      appSelector.searchResult.data.venues.length === 0 && 
+      appSelector.searchResult.data.performers.length === 0 &&
+      appSelector.searchResult.data.events.length === 0
+      ) {
+      setIsQueryResult(false)
+    } else {
+      setIsQueryResult(true)
+    }
+  },[
+    appSelector.searchResult.data.venues.length,
+    appSelector.searchResult.data.performers.length,
+    appSelector.searchResult.data.events.length,
+  ])
+
   return (
     <SearchBarContainer>
       <SearchTextFieldContainer
         focus = {focus || query.length > 0}
-        showResults = {searchResults.length > 0}
+        showResults = {query.length > 0 && (appSelector.searchResult.status.status === 'fulfilled' || isQueryResult) }
       >
         <Icon src='./icons/search.png' alt ='search icon' /> 
         <TextField 
@@ -40,22 +79,62 @@ const SearchBar: FC = () =>{
         </CloseIconContainer>
       </SearchTextFieldContainer>
 
-      {searchResults.length > 0 &&    
+      { query.length > 0 && (appSelector.searchResult.status.status === 'fulfilled' || isQueryResult) &&
         <ResultDisplay>
           <Divider />
           <ScrollContainer>
-            <SearchTitleDivider title='events' />
-            <SearchResultCard title='cocierto' subtitle='alejandro sanz' image='https://maps.gametime.co/v2/pnc_park/baseball/baseball-8.png' />
-            <SearchResultCard title='cocierto' subtitle='alejandro sanz' image='https://maps.gametime.co/v2/pnc_park/baseball/baseball-8.png' />
-            <SearchResultCard title='cocierto' subtitle='alejandro sanz' image='https://maps.gametime.co/v2/pnc_park/baseball/baseball-8.png' />
-            <SearchTitleDivider title='events' />
-            <SearchResultCard title='cocierto' subtitle='alejandro sanz' image='https://maps.gametime.co/v2/pnc_park/baseball/baseball-8.png' />
-            <SearchResultCard title='cocierto' subtitle='alejandro sanz' image='https://maps.gametime.co/v2/pnc_park/baseball/baseball-8.png' />
-            <SearchResultCard title='cocierto' subtitle='alejandro sanz' image='https://maps.gametime.co/v2/pnc_park/baseball/baseball-8.png' />
-            <SearchTitleDivider title='events' />
-            <SearchResultCard title='cocierto' subtitle='alejandro sanz' image='https://maps.gametime.co/v2/pnc_park/baseball/baseball-8.png' />
-            <SearchResultCard title='cocierto' subtitle='alejandro sanz' image='https://maps.gametime.co/v2/pnc_park/baseball/baseball-8.png' />
-            <SearchResultCard title='cocierto' subtitle='alejandro sanz' image='https://maps.gametime.co/v2/pnc_park/baseball/baseball-8.png' />
+            {appSelector.searchResult.data.events!.length > 0 && (
+                <>
+                  <SearchTitleDivider title='events' />
+                  {appSelector.searchResult.data.events?.map((event, index) => {
+            
+                    return (
+                      <SearchResultCard 
+                        key={index}
+                        title={event.title} 
+                        subtitle={event.subtitle} 
+                        image={event.image} 
+                      />
+                    )
+                  })}
+                </>
+              )
+            } 
+            { appSelector.searchResult.data.performers.length > 0 && (
+                <>
+                  <SearchTitleDivider title='performers' />
+                  {appSelector.searchResult.data.performers.map((event, index) => {
+                    return (
+                      <SearchResultCard 
+                        key={index}
+                        title={event.title} 
+                        subtitle={event.subtitle} 
+                        image={event.image} 
+                      />
+                    )
+                  })}
+                </>
+              )
+            } 
+            {appSelector.searchResult.data.venues.length > 0 && (
+                <>
+                  <SearchTitleDivider title='venues' />
+                  {appSelector.searchResult.data.venues.map((event, index) => {
+                    return (
+                      <SearchResultCard 
+                        key={index}
+                        title={event.title} 
+                        subtitle={event.subtitle} 
+                        image={event.image} 
+                      />
+                    )
+                  })}
+                </>
+              )
+            }
+            { !isQueryResult &&
+              <NoResultCard />
+            }          
           </ScrollContainer>
         </ResultDisplay>
       }
@@ -148,7 +227,7 @@ const ResultDisplay = styled.div`
   border: 1.5px solid black;
   border-top: 0px;
   border-radius: 0px 0px 20px 20px;
-  padding-bottom: 15px;
+  padding-bottom: 10px;
   position: absolute;
 `
 const Divider = styled.div`
@@ -158,7 +237,6 @@ const Divider = styled.div`
 `
 const ScrollContainer = styled.div`
   width: 100%;
-  min-height: 100px;
   max-height: 300px;
   overflow-y: auto;
   padding: 10px;
