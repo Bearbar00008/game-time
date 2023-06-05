@@ -7,7 +7,7 @@ const Home: FC = () => {
   return (
     <PageContainer>
       <LogoContainer>
-        <LogoImage src="./logo/Gametime_logo.png" />
+        <LogoImage src="./logo/Gametime_logo.png" alt="game time logo" />
       </LogoContainer>
       <SearchBarContainer>
         <SearchBar />

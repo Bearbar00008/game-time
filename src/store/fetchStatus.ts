@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction, Action } from "@reduxjs/toolkit"
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 export const createSliceStatus = (name: string) => {
   interface TCounterState {

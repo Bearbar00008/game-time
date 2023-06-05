@@ -78,7 +78,7 @@ const SearchBar: FC = () => {
           {query.length > 0 && (
             <CloseIcon
               src="./icons/close.png"
-              alt="search icon"
+              alt="clear icon"
               onClick={clearField}
             />
           )}

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { TSearchResponse } from "../../types/searchResponse"
-import { TSearchSData } from "../../types/searchData"
+import { TSearchResponse } from "../../../types/searchResponse"
+import { TSearchSData } from "../../../types/searchData"
 
 const initialState: TSearchSData = { events: [], performers: [], venues: [] }
 

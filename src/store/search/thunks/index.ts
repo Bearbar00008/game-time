@@ -1,7 +1,7 @@
-import { appReducerThunk } from "../store"
-import { axiosCustomInstance } from "../../utils/axios"
-import { setResultQuery } from "./slicer"
-import { createSliceStatus, actionsGenerator } from "../fetchStatus"
+import { appReducerThunk } from "../../store"
+import { axiosCustomInstance } from "../../../utils/axios"
+import { setResultQuery } from "../slicer"
+import { createSliceStatus, actionsGenerator } from "../../fetchStatus"
 
 export const getQuery =
   (query: string): appReducerThunk =>
