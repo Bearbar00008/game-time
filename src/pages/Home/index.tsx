@@ -20,6 +20,14 @@ const PageContainer = styled.main`
   width: 100%;
   height: 100vh;
   padding-top: 15%;
+
+  @media (width < 1024px) {
+    padding-top: 25%;
+  }
+
+  @media (width < 768px) {
+    padding-top: 40%;
+  }
 `
 
 const LogoContainer = styled.div`
