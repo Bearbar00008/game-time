@@ -10,7 +10,7 @@ Make sure you have Node.js installed on your system. The recommended version is 
 
 In the project directory you can run:
 
-### `git clone <https://github.com/Bearbar00008/game-time.git>`
+### `git clone https://github.com/Bearbar00008/game-time.git`
 
 Then navigate to the project folder:
 
