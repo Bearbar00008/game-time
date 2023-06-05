@@ -1,7 +1,7 @@
 export interface TSearchSData {
-  events: TGeneralEntity []
-  performers: TGeneralEntity []
-  venues: TGeneralEntity []
+  events: TGeneralEntity[]
+  performers: TGeneralEntity[]
+  venues: TGeneralEntity[]
 }
 
 interface TGeneralEntity {
@@ -10,4 +10,3 @@ interface TGeneralEntity {
   title: string
   subtitle: string
 }
-  

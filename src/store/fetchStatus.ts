@@ -1,45 +1,45 @@
-import { createSlice, PayloadAction, Action } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction, Action } from "@reduxjs/toolkit"
 
-export const createSliceStatus = (name: string) =>{
+export const createSliceStatus = (name: string) => {
+  interface TCounterState {
+    status: "idle" | "pending" | "fulfilled" | "rejected"
+    error: null | string | string[]
+  }
 
-     interface TCounterState {
-        status: 'idle' | 'pending' | 'fulfilled' | 'rejected'
-        error: null | string | string []
-      }
-      
-      const initialState: TCounterState = {
-        status: 'idle',
-        error: null
-      };
+  const initialState: TCounterState = {
+    status: "idle",
+    error: null,
+  }
 
+  const newSliceStatus = createSlice({
+    name: `${name}/status`,
+    initialState,
 
-    const newSliceStatus = createSlice({
-        name: `${name}/status`,
-        initialState,
-        
-        reducers: {
-        
-        idle: (state) => {
-            state.status = "idle"
-        },
+    reducers: {
+      idle: (state) => {
+        state.status = "idle"
+      },
 
-        pending: (state) => {
-            state.status = "pending"
-        },
+      pending: (state) => {
+        state.status = "pending"
+      },
 
-        fulfilled: (state) => {
-            state.status = "fulfilled"
-        },
-        rejected: (state, action: PayloadAction<string>) => {
-            state.status = "rejected"
-            state.error = action.payload
-        },
-        },
-    });
+      fulfilled: (state) => {
+        state.status = "fulfilled"
+      },
+      rejected: (state, action: PayloadAction<string>) => {
+        state.status = "rejected"
+        state.error = action.payload
+      },
+    },
+  })
 
-
-    return  newSliceStatus
+  return newSliceStatus
 }
 
-export const actionsGenerator = (actions: any) =>  [actions.idle, actions.pending, actions.fulfilled, actions.rejected]
-
+export const actionsGenerator = (actions: any) => [
+  actions.idle,
+  actions.pending,
+  actions.fulfilled,
+  actions.rejected,
+]

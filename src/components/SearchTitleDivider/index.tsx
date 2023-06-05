@@ -1,17 +1,14 @@
-import { FC } from 'react'
-import styled from 'styled-components'
+import { FC } from "react"
+import styled from "styled-components"
 
 interface TSearchTitleDivider {
   title: string
 }
 
-const SearchTitleDivider: FC<TSearchTitleDivider> = ({title}) =>{
-
-  return(
+const SearchTitleDivider: FC<TSearchTitleDivider> = ({ title }) => {
+  return (
     <SearchTitleDividerContainer>
-      <Title>
-        {title}
-      </Title>
+      <Title>{title}</Title>
     </SearchTitleDividerContainer>
   )
 }
@@ -33,7 +30,7 @@ const Title = styled.h3`
 
   @media (width < 1024px) {
     font-size: 16px;
-	}
+  }
 `
 
 export default SearchTitleDivider
