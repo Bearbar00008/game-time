@@ -20,7 +20,7 @@ const Home: FC = () =>{
 const PageContainer = styled.main`
 	width: 100%;
 	height: 100vh;
-	padding-top: 150px; 
+	padding-top: 15%; 
 `
 
 const LogoContainer = styled.div`

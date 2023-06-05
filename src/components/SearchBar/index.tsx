@@ -1,6 +1,7 @@
 import { FC, useState, useEffect } from 'react'
 import styled from 'styled-components'
 
+import { TSearchSData } from '../../types/searchData'
 import { useDebounce } from '../../hooks'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { selectAppReducer } from '../../store/store'
@@ -29,6 +30,7 @@ const SearchBar: FC = () =>{
     if (debounce.length > 0) {
       appDispatch(getQuery(query))
     }
+    // eslint-disable-next-line
   }, [debounce])
 
   useEffect(()=>{
@@ -36,6 +38,7 @@ const SearchBar: FC = () =>{
       appDispatch(setClear())
       appDispatch(setGetQueryStatusStatusIdle())
     }
+    // eslint-disable-next-line
   },[query])
 
   useEffect(()=>{
@@ -83,58 +86,32 @@ const SearchBar: FC = () =>{
         <ResultDisplay>
           <Divider />
           <ScrollContainer>
-            {appSelector.searchResult.data.events!.length > 0 && (
-                <>
-                  <SearchTitleDivider title='events' />
-                  {appSelector.searchResult.data.events?.map((event, index) => {
-            
-                    return (
-                      <SearchResultCard 
-                        key={index}
-                        title={event.title} 
-                        subtitle={event.subtitle} 
-                        image={event.image} 
-                      />
-                    )
-                  })}
-                </>
-              )
-            } 
-            { appSelector.searchResult.data.performers.length > 0 && (
-                <>
-                  <SearchTitleDivider title='performers' />
-                  {appSelector.searchResult.data.performers.map((event, index) => {
-                    return (
-                      <SearchResultCard 
-                        key={index}
-                        title={event.title} 
-                        subtitle={event.subtitle} 
-                        image={event.image} 
-                      />
-                    )
-                  })}
-                </>
-              )
-            } 
-            {appSelector.searchResult.data.venues.length > 0 && (
-                <>
-                  <SearchTitleDivider title='venues' />
-                  {appSelector.searchResult.data.venues.map((event, index) => {
-                    return (
-                      <SearchResultCard 
-                        key={index}
-                        title={event.title} 
-                        subtitle={event.subtitle} 
-                        image={event.image} 
-                      />
-                    )
-                  })}
-                </>
-              )
-            }
+            {Object.keys(appSelector.searchResult.data).map((entity) => {
+              if (appSelector.searchResult.data[entity as keyof TSearchSData].length > 0) {
+                return (
+                  <div key={entity}>
+                    <SearchTitleDivider title={entity} />
+                    {appSelector.searchResult.data[entity as keyof TSearchSData].map((entity) => {
+                      return (
+                        <SearchResultCard 
+                          key={entity.id}
+                          title={entity.title} 
+                          subtitle={entity.subtitle} 
+                          image={entity.image} 
+                        />
+                      )
+                    })}
+                  </div>
+                )
+              }
+              else {
+                return null
+              }
+            })}
+
             { !isQueryResult &&
               <NoResultCard />
-            }          
+            }         
           </ScrollContainer>
         </ResultDisplay>
       }
