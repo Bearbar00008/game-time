@@ -43,7 +43,6 @@ export const searchSlice = createSlice({
       })
     },
     setClear: (state) => {
-      console.log('entro')
       state.events = []
       state.performers = []
       state.venues = []

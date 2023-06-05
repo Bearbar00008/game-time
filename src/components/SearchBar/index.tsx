@@ -49,9 +49,9 @@ const SearchBar: FC = () =>{
       setIsQueryResult(true)
     }
   },[
-    appSelector.searchResult.data.venues.length,
-    appSelector.searchResult.data.performers.length,
-    appSelector.searchResult.data.events.length,
+    appSelector.searchResult.data.venues,
+    appSelector.searchResult.data.performers,
+    appSelector.searchResult.data.events,
   ])
 
   return (
